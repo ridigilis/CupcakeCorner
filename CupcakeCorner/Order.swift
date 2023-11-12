@@ -7,16 +7,17 @@
 
 import SwiftUI
 
-class Order: ObservableObject {
+@Observable
+class Order: Codable {
     static let types = ["Vanilla", "Strawberry", "Chocolate", "Rainbow"]
     
-    @Published var type = 0
-    @Published var quantity = 3
+    var type = 0
+    var quantity = 3
     
-    @Published var name = ""
-    @Published var streetAddress = ""
-    @Published var city = ""
-    @Published var zip = ""
+    var name = ""
+    var streetAddress = ""
+    var city = ""
+    var zip = ""
     
     var hasValidAddress: Bool {
         if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty {
@@ -26,7 +27,7 @@ class Order: ObservableObject {
         return true
     }
     
-    @Published var specialRequestEnabled = false {
+    var specialRequestEnabled = false {
         didSet {
             if specialRequestEnabled == false {
                 extraFrosting = false
@@ -34,8 +35,8 @@ class Order: ObservableObject {
             }
         }
     }
-    @Published var extraFrosting = false
-    @Published var addSprinkles = false
+    var extraFrosting = false
+    var addSprinkles = false
     
     var cost: Double {
         var cost = Double(quantity) * 2
@@ -51,5 +52,17 @@ class Order: ObservableObject {
         }
         
         return cost
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case _type = "type"
+        case _quantity = "quantity"
+        case _specialRequestEnabled = "specialRequestEnabled"
+        case _extraFrosting = "extraFrosting"
+        case _addSprinkles = "addSprinkles"
+        case _name = "name"
+        case _city = "city"
+        case _streetAddress = "streetAddress"
+        case _zip = "zip"
     }
 }
